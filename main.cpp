@@ -12,25 +12,33 @@ struct Person
     char first[25];
     char last[25];
     char phone[25];
+    char height[25];
 };
 
 class BinaryData
 {
+
 private:
+
     char age[25];
     char first[25];
     char last[25];
     char phone[25];
+    char height[25];
+
 public:
+
     BinaryData(){};
     ~BinaryData(){};
 
-    void SetData(int iAge, String strFirst, String strLast, String strPhone)
+    void SetData(int iAge, String strFirst, String strLast, String strPhone,
+     double dHeight)
     {
         sprintf(this->age, "%d", iAge);
         sprintf(this->first, "%s", strFirst.c_str());
         sprintf(this->last, "%s", strLast.c_str());
         sprintf(this->phone, "%s", strPhone.c_str());
+        sprintf(this->height, "%f", dHeight);
     }
 
     void Save(std::ofstream &of)
@@ -39,6 +47,7 @@ public:
         of.write((char *) &first, sizeof(first));
         of.write((char *) &last, sizeof(last));
         of.write((char *) &phone, sizeof(phone));
+        of.write((char *) &height, sizeof(height));
     }
 
     void WriteBinaryFile(String strFile)
@@ -66,12 +75,17 @@ public:
 
         while(binaryFile.tellg() < size)
         {
-            binaryFile.read((char*) p.age, sizeof(p.age));
-            binaryFile.read((char*) p.first, sizeof(p.first));
-            binaryFile.read((char*) p.last, sizeof(p.last));
-            binaryFile.read((char*) p.phone, sizeof(p.phone));
+            binaryFile.read((char *) p.age, sizeof(p.age));
+            binaryFile.read((char *) p.first, sizeof(p.first));
+            binaryFile.read((char *) p.last, sizeof(p.last));
+            binaryFile.read((char *) p.phone, sizeof(p.phone));
+            binaryFile.read((char *) p.height, sizeof(p.height));
 
-            std::cout << p.age << '\t' << p.first << '\t' << p.last << '\t' << p.phone << '\n';
+            std::cout << p.age << '\t'
+                      << p.first << '\t'
+                      << p.last << '\t'
+                      << p.phone << '\t'
+                      << p.height << '\n';
         }
         binaryFile.close();
     }
@@ -80,21 +94,15 @@ public:
 int main()
 {
 
-    String strFirst, strLast, strPhone;
-    int age;
+    String strFirst = "raph";
+    String strLast = "scherrer";
+    String strPhone = "666";
+    int age = 25;
+    double height = 172.0;
 
     std::unique_ptr<BinaryData> bd(new BinaryData());
 
-    std::cout << "enter age:";
-    std::cin >> age;
-    std::cout << "enter first name:";
-    std::cin >> strFirst;
-    std::cout << "enter last name:";
-    std::cin >> strLast;
-    std::cout << "enter phone number:";
-    std::cin >> strPhone;
-
-    bd->SetData(age, strFirst, strLast, strPhone);
+    bd->SetData(age, strFirst, strLast, strPhone, height);
     bd->WriteBinaryFile("./record.dat");
     bd->ReadBinaryFile("./record.dat");
 
