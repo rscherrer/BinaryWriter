@@ -10,5 +10,5 @@ install:
 script: 
   
  # Build and run and profile normal program
- - qmake ./program.pro
+ - qmake ./BinaryWriter.pro
  - make --silent release
